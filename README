@@ -1,0 +1,56 @@
+Create a private IPFS network 
+
+Prerequisite: 
+
+1) Go-lang 
+
+2) Docker and docker compose  
+
+3) go-ipfs-swarm-key-gen 
+
+4) Linux operating system 
+
+
+Steps 
+
+1) Download the docker file from https://raw.githubusercontent.com/ipfs/ipfs-cluster/v1.0.4/docker-compose.yml 
+
+2) Modify the docker file as per IPFS node requirement and IPFS cluster requirement  
+
+    Note: IPFS cluster manages data replication over a network of node so more than one cluster may be required or not, choose the configuration that suites the need of your application). 
+
+3) Modify the docker file by setting the environment variable LIBP2P_FORCE_PNET=1 for each IPFS node.  
+
+4) Then run docker-compose up by navigating inside the folder containing docker file that you have downloaded. 
+
+5) Use the swarm key gen tool to generate the key for the private network 
+
+6) Install ipfs-swarm-key-gen tool using go install 
+
+7) Run ipfs-swarm-key-gen after navigating inside the folder where go packages are installed. 
+
+8) Copy the generated key.  
+
+9) Then navigate inside the volume mounted for each of the nodes and create a file with name swarm.key and paste the key which was copied in the previous step. 
+
+10) Copy the swarm.key file to each of the ipfs node volumes. 
+
+11) Navigate inside the each running container console and run ipfs bootstrap rm –all. 
+
+    Note: This step can be done by create custom image and adding that command in the docker image 	file itself. 
+
+12) Navigate inside each running IPFS node container and add all other nodes in the network by running ipfs bootstrap add [ipfs node]  
+
+    for example, ipfs bootstrap add /ip4/192.168.10.1/tcp/4001/ipfs/QmQVvZEmvjhYgsyEC7NvMn8EWf131EcgTXFFJQYGSz4Y83 
+
+    /ip4/192.168.10.1/tcp/4001/ => SWARM protocol listening address 
+
+    QmQVvZEmvjhYgsyEC7NvMn8EWf131EcgTXFFJQYGSz4Y83 => hash of node 
+
+    You can get the hash of the node from ipfs config show command. 
+
+    Note: This step is required for IPFS peer discovery on a network and can be ignored if that is not a concern. 
+
+13) You can run a private cluster service running on top of the a private network of nodes and clusters can also be made private by adding cluster secret in the each of the clusters. 
+
+14) You can interact with ipfs private network by using ipfs http client and initiating it with any exposed ipfs node api.  
