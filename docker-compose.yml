@@ -1,0 +1,93 @@
+version: '3.4'
+# This is an example template for docker-compose file
+services:
+  ipfs0:
+    container_name: ipfs0
+    image: ipfs/go-ipfs:latest
+    ports:
+#     - "4001:4001" # ipfs swarm - expose if needed/wanted
+      - "5000:5001" # ipfs api - expose if needed/wanted
+      - "8080:8080" # ipfs gateway - expose if needed/wanted
+    environment:
+      LIBP2P_FORCE_PNET: 1
+    volumes:
+      - ./compose/ipfs0:/data/ipfs
+  ipfs1:
+    container_name: ipfs1
+    image: ipfs/go-ipfs:latest
+    ports:
+#     - "4001:4001" # ipfs swarm - expose if needed/wanted
+      - "5001:5001" # ipfs api - expose if needed/wanted
+      - "8081:8080" # ipfs gateway - expose if needed/wanted
+    environment:
+      LIBP2P_FORCE_PNET: 1
+    volumes:
+      - ./compose/ipfs1:/data/ipfs
+
+  ipfs2:
+    container_name: ipfs2
+    image: ipfs/go-ipfs:latest
+    ports:
+#     - "4001:4001" # ipfs swarm - expose if needed/wanted
+      - "5002:5001" # ipfs api - expose if needed/wanted
+      - "8082:8080" # ipfs gateway - expose if needed/wanted
+    environment:
+      LIBP2P_FORCE_PNET: 1
+    volumes:
+      - ./compose/ipfs2:/data/ipfs
+  
+  ipfs3:
+    container_name: ipfs3
+    image: ipfs/go-ipfs:latest
+    ports:
+#     - "4001:4001" # ipfs swarm - expose if needed/wanted
+      - "5003:5001" # ipfs api - expose if needed/wanted
+      - "8083:8080" # ipfs gateway - expose if needed/wanted
+    environment:
+      LIBP2P_FORCE_PNET: 1
+    volumes:
+      - ./compose/ipfs3:/data/ipfs
+  
+  ipfs4:
+    container_name: ipfs4
+    image: ipfs/go-ipfs:latest
+    ports:
+#     - "4001:4001" # ipfs swarm - expose if needed/wanted
+      - "5004:5001" # ipfs api - expose if needed/wanted
+      - "8084:8080" # ipfs gateway - expose if needed/wanted
+    environment:
+      LIBP2P_FORCE_PNET: 1
+    volumes:
+      - ./compose/ipfs4:/data/ipfs
+
+
+# this can be uncommented and can be used to creating any private cluster by providing CLUSTER_SECRET and ipfs nodes
+
+  cluster0:
+    container_name: cluster0
+    image: ipfs/ipfs-cluster:latest
+    depends_on:
+      - ipfs0
+      - ipfs1
+      - ipfs2
+      - ipfs3
+      - ipfs4
+    environment:
+      CLUSTER_PEERNAME: cluster0
+      # CLUSTER_SECRET: ${CLUSTER_SECRET} # From shell variable if set
+      CLUSTER_SECRET: "d460c146cee19606a6b419ee7a1916d2e8b73f162be3e62421eb7112a04bedbe" # From shell variable if set
+      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
+      CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
+      CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
+      CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
+    ports:
+          # Open API port (allows ipfs-cluster-ctl usage on host)
+          - "127.0.0.1:9094:9094"
+          # The cluster swarm port would need  to be exposed if this container
+          # was to connect to cluster peers on other hosts.
+          # But this is just a testing cluster.
+          # - "9095:9095" # Cluster IPFS Proxy endpoint
+          # - "9096:9096" # Cluster swarm endpoint
+    volumes:
+      - ./compose/cluster0:/data/ipfs-cluster    
+

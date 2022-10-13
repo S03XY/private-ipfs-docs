@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "ipfs-http-client": "^58.0.1"
+  },
+  "name": "private-ipfs",
+  "description": "Create a private IPFS network",
+  "version": "1.0.0",
+  "main": "smple_interaction.js",
+  "type": "module",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaincodechd/private-ipfs-docker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chaincodechd/private-ipfs-docker/issues"
+  },
+  "homepage": "https://github.com/chaincodechd/private-ipfs-docker#readme"
+}
